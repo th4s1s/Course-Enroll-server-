@@ -3,13 +3,14 @@ const pool = require('../db').pool
 async function getAllClasses(req, res) {
     try {
         SemID = req.params.semester
-        await pool.query('SELECT * FROM class WHERE SemID = $1 ORDER BY CourseID, ClassID', [SemID], (error, results) => {
+        await pool.query('SELECT * FROM get_class($1)', [SemID], (error, results) => {
             if (error) {
                 return res.status(500).json({
                     msg: error.message,
                 })
             }
             return res.status(200).json({
+                msg: 'Lấy danh sách lớp thành công',
                 class: results.rows
             })
         })
