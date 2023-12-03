@@ -148,7 +148,7 @@ async function calScholarship(req, res) {
         })
     }
     try {
-        scholarship = 25000000
+        scholarship = req.body.money
         student = req.body.susername
         SemID = req.body.semester
         await pool.query('SELECT * FROM calculate_scholarship($1, $2, $3)', [student, SemID, scholarship], (error, results) => {
@@ -159,7 +159,7 @@ async function calScholarship(req, res) {
             }
             return res.status(200).json({
                 msg: 'Lấy học bổng thành công',
-                scholarship: results.rows
+                scholarship: results.rows[0].calculate_scholarship
             })
         })
     } catch(error) {
