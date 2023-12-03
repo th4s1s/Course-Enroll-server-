@@ -14,6 +14,7 @@ app.use(morgan('tiny'));
 
 // routes
 const testRoute = require('./routes/testRoute')
+const classRoute = require('./routes/classRoute')
 
 
 app.listen(port, () => {
@@ -27,3 +28,4 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/test', testRoute)
+app.use('/api/class', classRoute)
