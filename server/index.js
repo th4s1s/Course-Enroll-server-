@@ -13,7 +13,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(morgan('tiny'));
 
 // routes
-const testRoute = require('./routes/testRoute')
 const classRoute = require('./routes/classRoute')
 const instructorRoute = require('./routes/instructorRoute')
 const studentRoute = require('./routes/studentRoute')
@@ -28,7 +27,6 @@ app.get('/', (req, res) => {
     })
 })
 
-app.use('/api/test', testRoute)
 app.use('/api/class', classRoute)
 app.use('/api/instructor', instructorRoute)
 app.use('/api/student', studentRoute)
