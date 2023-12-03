@@ -87,4 +87,86 @@ async function unenrollClass(req, res) {
     }
 }
 
-module.exports = {login, enrollClass, unenrollClass}
+async function getSchedule(req, res) {
+    if(!req.body.susername || !req.body.semester) {
+        return res.status(400).json({
+            msg: 'Bad request'
+        })
+    }
+    try {
+        student = req.body.susername
+        SemID = req.body.semester
+        await pool.query('SELECT * FROM get_student_schedule($1, $2)', [student, SemID], (error, results) => {
+            if (error) {
+                return res.status(500).json({
+                    msg: error.message,
+                })
+            }
+            return res.status(200).json({
+                msg: 'Lấy thời khóa biểu thành công',
+                schedule: results.rows
+            })
+        })
+    } catch(error) {
+        return res.status(500).json({
+            msg: error.message,
+        })
+    }
+}
+
+async function getScoreboard(req, res) {
+    if(!req.body.susername || !req.body.semester) {
+        return res.status(400).json({
+            msg: 'Bad request'
+        })
+    }
+    try {
+        student = req.body.susername
+        SemID = req.body.semester
+        await pool.query('SELECT * FROM show_student_scoreboard($1, $2)', [student, SemID], (error, results) => {
+            if (error) {
+                return res.status(500).json({
+                    msg: error.message,
+                })
+            }
+            return res.status(200).json({
+                msg: 'Lấy bảng điểm thành công',
+                scoreboard: results.rows
+            })
+        })
+    } catch(error) {
+        return res.status(500).json({
+            msg: error.message,
+        })
+    }
+}
+
+async function calScholarship(req, res) {
+    if(!req.body.susername || !req.body.semester) {
+        return res.status(400).json({
+            msg: 'Bad request'
+        })
+    }
+    try {
+        scholarship = 25000000
+        student = req.body.susername
+        SemID = req.body.semester
+        await pool.query('SELECT * FROM calculate_scholarship($1, $2, $3)', [student, SemID, scholarship], (error, results) => {
+            if (error) {
+                return res.status(500).json({
+                    msg: error.message,
+                })
+            }
+            return res.status(200).json({
+                msg: 'Lấy học bổng thành công',
+                scholarship: results.rows
+            })
+        })
+    } catch(error) {
+        return res.status(500).json({
+            msg: error.message,
+        })
+    }
+}
+
+module.exports = {login, enrollClass, unenrollClass, getSchedule, getScoreboard, calScholarship}
