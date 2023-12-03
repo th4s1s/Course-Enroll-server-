@@ -76,4 +76,30 @@ async function unenrollClass(req, res) {
     }
 }
 
-module.exports = {getAllClasses , enrollClass, unenrollClass}
+async function endRegisterClass(req, res) {
+    if(!req.body.semester) {
+        return res.status(400).json({
+            msg: 'Bad request'
+        })
+    }
+    try {
+        SemID = req.body.semester
+        console.log(SemID)
+        await pool.query('CALL register_end($1)', [SemID], (error, results) => {
+            if (error) {
+                return res.status(500).json({
+                    msg: error.message,
+                })
+            }
+            return res.status(200).json({
+                msg: 'Đã kết thúc thời hạn đăng ký môn học',
+            })
+        })
+    } catch(error) {
+        return res.status(500).json({
+            msg: error.message,
+        })
+    }
+}
+
+module.exports = {getAllClasses , enrollClass, unenrollClass, endRegisterClass}
