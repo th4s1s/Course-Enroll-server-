@@ -126,5 +126,3 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-server/db/
-server/db/index.js

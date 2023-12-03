@@ -15,7 +15,8 @@ app.use(morgan('tiny'));
 // routes
 const testRoute = require('./routes/testRoute')
 const classRoute = require('./routes/classRoute')
-
+const instructorRoute = require('./routes/instructorRoute')
+const studentRoute = require('./routes/studentRoute')
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`)
@@ -29,3 +30,5 @@ app.get('/', (req, res) => {
 
 app.use('/api/test', testRoute)
 app.use('/api/class', classRoute)
+app.use('/api/instructor', instructorRoute)
+app.use('/api/student', studentRoute)
