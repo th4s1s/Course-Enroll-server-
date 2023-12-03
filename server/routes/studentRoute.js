@@ -6,5 +6,7 @@ const router = express.Router();
 const studentCtl = require('../controller/studentController');
 
 router.post('/login', studentCtl.login);
+router.post('/enroll', studentCtl.enrollClass);
+router.post('/unenroll', studentCtl.unenrollClass);
 
 module.exports = router;

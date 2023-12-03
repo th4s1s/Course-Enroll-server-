@@ -20,53 +20,25 @@ async function getAllClasses(req, res) {
     }
 }
 
-async function enrollClass(req, res) {
-    if(!req.body.susername || !req.body.class || !req.body.semester || !req.body.course) {
+async function getStudentFromClass(req, res) {
+    if(!req.body.class || !req.body.semester || !req.body.course) {
         return res.status(400).json({
             msg: 'Bad request'
         })
     }
     try {
-        student = req.body.susername
         classID = req.body.class
         SemID = req.body.semester
         CourseID = req.body.course
-        await pool.query('CALL enroll($1, $2, $3, $4)', [classID, CourseID, SemID, student], (error, results) => {
+        await pool.query('SELECT * FROM list_students_in_class($1, $2, $3)', [classID, CourseID, SemID], (error, results) => {
             if (error) {
                 return res.status(500).json({
                     msg: error.message,
                 })
             }
             return res.status(200).json({
-                msg: 'Đăng ký thành công',
-            })
-        })
-    } catch(error) {
-        return res.status(500).json({
-            msg: error.message,
-        })
-    }
-}
-
-async function unenrollClass(req, res) {
-    if(!req.body.susername || !req.body.class || !req.body.semester || !req.body.course) {
-        return res.status(400).json({
-            msg: 'Bad request'
-        })
-    }
-    try {
-        student = req.body.susername
-        classID = req.body.class
-        SemID = req.body.semester
-        CourseID = req.body.course
-        await pool.query('CALL unenroll($1, $2, $3, $4)', [classID, CourseID, SemID, student], (error, results) => {
-            if (error) {
-                return res.status(500).json({
-                    msg: error.message,
-                })
-            }
-            return res.status(200).json({
-                msg: 'Hủy đăng ký thành công',
+                msg: 'Lấy danh sách sinh viên thành công',
+                studentList: results.rows,
             })
         })
     } catch(error) {
@@ -77,14 +49,13 @@ async function unenrollClass(req, res) {
 }
 
 async function endRegisterClass(req, res) {
-    if(!req.body.semester) {
+    if(!req.body.semester || !pool) {
         return res.status(400).json({
             msg: 'Bad request'
         })
     }
     try {
         SemID = req.body.semester
-        console.log(SemID)
         await pool.query('CALL register_end($1)', [SemID], (error, results) => {
             if (error) {
                 return res.status(500).json({
@@ -102,4 +73,4 @@ async function endRegisterClass(req, res) {
     }
 }
 
-module.exports = {getAllClasses , enrollClass, unenrollClass, endRegisterClass}
+module.exports = {getAllClasses, getStudentFromClass, endRegisterClass}
