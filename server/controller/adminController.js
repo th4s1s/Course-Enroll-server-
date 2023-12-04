@@ -28,9 +28,14 @@ async function adminLogin(req, res) {
 }
 
 async function endRegisterClass(req, res) {
-    if(!req.body.semester || !pool) {
+    if(!req.body.semester || !pool || !req.headers.authorization) {
         return res.status(400).json({
             msg: 'Bad request'
+        })
+    }
+    if(req.headers.authorization != 'Basic 4AZAtA2A2BYBNBfByA-AAAAAAAAAAA6=') {
+        return res.status(401).json({
+            msg: 'Không có quyền admin'
         })
     }
     try {
@@ -53,9 +58,14 @@ async function endRegisterClass(req, res) {
 }
 
 async function getInstructorList(req, res) {
-    if(!pool) {
+    if(!pool || !req.headers.authorization) {
         return res.status(400).json({
             msg: 'Bad request'
+        })
+    }
+    if(req.headers.authorization != 'Basic 4AZAtA2A2BYBNBfByA-AAAAAAAAAAA6=') {
+        return res.status(401).json({
+            msg: 'Không có quyền admin'
         })
     }
     try {
@@ -78,9 +88,14 @@ async function getInstructorList(req, res) {
 }
 
 async function updateInstructorInfo(req, res) {
-    if(!req.body.insusername || !req.body.name || !req.body.id || !req.body.address || !req.body.bdate || !req.body.rank || !req.body.phone || !req.body.dname) {
+    if(!pool || !req.headers.authorization || !req.body.insusername || !req.body.name || !req.body.id || !req.body.address || !req.body.bdate || !req.body.rank || !req.body.phone || !req.body.dname) {
         return res.status(400).json({
             msg: 'Bad request'
+        })
+    }
+    if(req.headers.authorization != 'Basic 4AZAtA2A2BYBNBfByA-AAAAAAAAAAA6=') {
+        return res.status(401).json({
+            msg: 'Không có quyền admin'
         })
     }
     try {
@@ -110,9 +125,14 @@ async function updateInstructorInfo(req, res) {
 }
 
 async function addInstructor(req, res) {
-    if(!req.body.insusername || !req.body.password || !req.body.name || !req.body.id || !req.body.address || !req.body.bdate || !req.body.rank || !req.body.phone || !req.body.dname) {
+    if(!pool || !req.headers.authorization || !req.body.insusername || !req.body.password || !req.body.name || !req.body.id || !req.body.address || !req.body.bdate || !req.body.rank || !req.body.phone || !req.body.dname || !req.body.degree) {
         return res.status(400).json({
             msg: 'Bad request'
+        })
+    }
+    if(req.headers.authorization != 'Basic 4AZAtA2A2BYBNBfByA-AAAAAAAAAAA6=') {
+        return res.status(401).json({
+            msg: 'Không có quyền admin'
         })
     }
     try {
@@ -125,7 +145,8 @@ async function addInstructor(req, res) {
         rank = req.body.rank
         phone = req.body.phone
         dname = req.body.dname
-        await pool.query('CALL add_instructor($1, $2, $3, $4, $5, $6, $7, $8, $9)', [instructor, password, iname, id, address, bdate, rank, phone, dname], (error, results) => {
+        degree = req.body.degree
+        await pool.query('CALL add_instructor($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)', [instructor, password, iname, id, address, bdate, rank, phone, dname, degree], (error, results) => {
             if (error) {
                 return res.status(500).json({
                     msg: error.message,
@@ -143,9 +164,14 @@ async function addInstructor(req, res) {
 }
 
 async function removeInstructor(req, res) {
-    if(!req.body.insusername) {
+    if(!pool || !req.headers.authorization || !req.body.insusername) {
         return res.status(400).json({
             msg: 'Bad request'
+        })
+    }
+    if(req.headers.authorization != 'Basic 4AZAtA2A2BYBNBfByA-AAAAAAAAAAA6=') {
+        return res.status(401).json({
+            msg: 'Không có quyền admin'
         })
     }
     try {
@@ -168,9 +194,14 @@ async function removeInstructor(req, res) {
 }
 
 async function insertInstructorDegree(req, res) {
-    if(!req.body.insusername || !req.body.degree) {
+    if(!pool || !req.headers.authorization || !req.body.insusername || !req.body.degree) {
         return res.status(400).json({
             msg: 'Bad request'
+        })
+    }
+    if(req.headers.authorization != 'Basic 4AZAtA2A2BYBNBfByA-AAAAAAAAAAA6=') {
+        return res.status(401).json({
+            msg: 'Không có quyền admin'
         })
     }
     try {
