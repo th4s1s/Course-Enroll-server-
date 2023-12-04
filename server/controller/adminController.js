@@ -52,4 +52,29 @@ async function endRegisterClass(req, res) {
     }
 }
 
-module.exports = {adminLogin, endRegisterClass}
+async function getInstructorList(req, res) {
+    if(!pool) {
+        return res.status(400).json({
+            msg: 'Bad request'
+        })
+    }
+    try {
+        await pool.query('SELECT * FROM get_instructor_info()', (error, results) => {
+            if (error) {
+                return res.status(500).json({
+                    msg: error.message,
+                })
+            }
+            return res.status(200).json({
+                msg: 'Lấy danh sách giảng viên thành công',
+                list: results.rows
+            })
+        })
+    } catch(error) {
+        return res.status(500).json({
+            msg: error.message,
+        })
+    }
+}
+
+module.exports = {adminLogin, endRegisterClass, getInstructorList}

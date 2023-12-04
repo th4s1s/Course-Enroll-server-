@@ -15,13 +15,14 @@ async function login(req, res) {
                     msg: error.message,
                 })
             }
-            if(results.rows[0].login == false) {
+            if(results.rows[0] == undefined) {
                 return res.status(400).json({
                     msg: 'Sai tên đăng nhập hoặc mật khẩu',
                 })
             }
             else return res.status(200).json({
                 msg: 'Đăng nhập thành công',
+                info: results.rows[0]
             })
         })
     } catch(error) {
