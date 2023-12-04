@@ -10,6 +10,5 @@ router.post('/enroll', studentCtl.enrollClass);
 router.post('/unenroll', studentCtl.unenrollClass);
 router.post('/schedule', studentCtl.getSchedule);
 router.post('/scoreboard', studentCtl.getScoreboard);
-router.post('/scholarship', studentCtl.calScholarship);
 
 module.exports = router;
