@@ -135,8 +135,8 @@ async function getScoreboard(req, res) {
             return res.status(200).json({
                 msg: 'Lấy bảng điểm thành công',
                 scoreboard: results.rows,
-                gpa: gpa.rows[0],
-                scholarship: money.rows[0]
+                gpa: gpa.rows[0].calculate_semester_gpa,
+                scholarship: money.rows[0].calculate_scholarship
             })
         })
     } catch(error) {

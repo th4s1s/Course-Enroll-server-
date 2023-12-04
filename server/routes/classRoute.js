@@ -7,6 +7,5 @@ const classCtl = require('../controller/classController');
 
 router.get('/:semester', classCtl.getAllClasses);
 router.post('/list', classCtl.getStudentFromClass);
-router.post('/end', classCtl.endRegisterClass);
 
 module.exports = router;
