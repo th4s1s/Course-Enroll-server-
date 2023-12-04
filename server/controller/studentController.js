@@ -124,6 +124,8 @@ async function getScoreboard(req, res) {
     try {
         student = req.body.susername
         SemID = req.body.semester
+        gpa = await pool.query('SELECT * FROM calculate_semester_gpa($1, $2)', [student, SemID])
+        money = await pool.query('SELECT * FROM calculate_scholarship($1, $2, 25000000)', [student, SemID])
         await pool.query('SELECT * FROM show_student_scoreboard($1, $2)', [student, SemID], (error, results) => {
             if (error) {
                 return res.status(500).json({
@@ -132,7 +134,9 @@ async function getScoreboard(req, res) {
             }
             return res.status(200).json({
                 msg: 'Lấy bảng điểm thành công',
-                scoreboard: results.rows
+                scoreboard: results.rows,
+                gpa: gpa.rows[0],
+                scholarship: money.rows[0]
             })
         })
     } catch(error) {
