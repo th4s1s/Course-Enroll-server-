@@ -11,7 +11,6 @@ async function adminConnect(username, password) {
 
     try {
         const client = await pool.connect();
-        console.log(username, password);
         console.log('sManager connected to the database');
         return client;
     } catch (error) {
