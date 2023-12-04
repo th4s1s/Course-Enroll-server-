@@ -77,4 +77,120 @@ async function getInstructorList(req, res) {
     }
 }
 
-module.exports = {adminLogin, endRegisterClass, getInstructorList}
+async function updateInstructorInfo(req, res) {
+    if(!req.body.insusername || !req.body.name || !req.body.id || !req.body.address || !req.body.bdate || !req.body.rank || !req.body.phone || !req.body.dname) {
+        return res.status(400).json({
+            msg: 'Bad request'
+        })
+    }
+    try {
+        instructor = req.body.insusername
+        iname = req.body.name
+        id = req.body.id
+        address = req.body.address
+        bdate = req.body.bdate
+        rank = req.body.rank
+        phone = req.body.phone
+        dname = req.body.dname
+        await pool.query('CALL update_instructor_info($1, $2, $3, $4, $5, $6, $7, $8)', [instructor, iname, id, address, bdate, rank, phone, dname], (error, results) => {
+            if (error) {
+                return res.status(500).json({
+                    msg: error.message,
+                })
+            }
+            return res.status(200).json({
+                msg: 'Cập nhật thông tin giảng viên thành công',
+            })
+        })
+    } catch(error) {
+        return res.status(500).json({
+            msg: error.message,
+        })
+    }
+}
+
+async function addInstructor(req, res) {
+    if(!req.body.insusername || !req.body.password || !req.body.name || !req.body.id || !req.body.address || !req.body.bdate || !req.body.rank || !req.body.phone || !req.body.dname) {
+        return res.status(400).json({
+            msg: 'Bad request'
+        })
+    }
+    try {
+        instructor = req.body.insusername
+        password = req.body.password
+        iname = req.body.name
+        id = req.body.id
+        address = req.body.address
+        bdate = req.body.bdate
+        rank = req.body.rank
+        phone = req.body.phone
+        dname = req.body.dname
+        await pool.query('CALL add_instructor($1, $2, $3, $4, $5, $6, $7, $8, $9)', [instructor, password, iname, id, address, bdate, rank, phone, dname], (error, results) => {
+            if (error) {
+                return res.status(500).json({
+                    msg: error.message,
+                })
+            }
+            return res.status(200).json({
+                msg: 'Thêm giảng viên thành công',
+            })
+        })
+    } catch(error) {
+        return res.status(500).json({
+            msg: error.message,
+        })
+    }
+}
+
+async function removeInstructor(req, res) {
+    if(!req.body.insusername) {
+        return res.status(400).json({
+            msg: 'Bad request'
+        })
+    }
+    try {
+        instructor = req.body.insusername
+        await pool.query('CALL delete_instructor($1)', [instructor], (error, results) => {
+            if (error) {
+                return res.status(500).json({
+                    msg: error.message,
+                })
+            }
+            return res.status(200).json({
+                msg: 'Xóa giảng viên thành công',
+            })
+        })
+    } catch(error) {
+        return res.status(500).json({
+            msg: error.message,
+        })
+    }
+}
+
+async function insertInstructorDegree(req, res) {
+    if(!req.body.insusername || !req.body.degree) {
+        return res.status(400).json({
+            msg: 'Bad request'
+        })
+    }
+    try {
+        instructor = req.body.insusername
+        degree = req.body.degree
+        await pool.query('CALL insert_degree($1, $2)', [degree, instructor], (error, results) => {
+            if (error) {
+                return res.status(500).json({
+                    msg: error.message,
+                })
+            }
+            return res.status(200).json({
+                msg: 'Thêm học vị thành công',
+            })
+        })
+    } catch(error) {
+        return res.status(500).json({
+            msg: error.message,
+        })
+    }
+}
+
+module.exports = {adminLogin, endRegisterClass, getInstructorList, updateInstructorInfo, addInstructor, removeInstructor, insertInstructorDegree}
